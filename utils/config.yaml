@@ -1,0 +1,67 @@
+# General configuration
+general:
+
+  output_dir: "results/"
+  device: "gpu"
+  log_dir: 'log_dir'
+  random_seed: 0
+  cuda_number: 5
+  defense: 'Fed-NAD'  # Defense method used in federated learning 
+  # Fed-Avg, TrimmedMean, Normcliping, Fed-NAD
+
+
+model:
+  name: "resnet18"  # Model architecture to use (ResNet18)
+
+defense:
+  norm_bound: 5  # Norm bound for gradient clipping
+  stddev: 0.025  # Standard deviation for noise addition or perturbation
+  krum_m: 4  # The number of "honest" clients for Krum defense
+  NAD_p: 2  # The p-value for NAD (Noise-Aware Defense) method
+
+attack:
+
+  scale_factor: 10  # Scaling factor used in the attack
+  top_k_ratio: 0.7  # Ratio for selecting the top-k poisoned clients, if 1 it means no masking is used
+
+# Dataset configuration
+dataset:
+  name: "cifar10"  # Dataset used (CIFAR-10)
+
+  save_path: 'data'  # Path to save dataset
+  batch_size: 64  # Batch size for training
+  num_workers: 8  # Number of worker threads for data loading
+  num_classes: 10  # Number of classes in the dataset (CIFAR-10 has 10 classes)
+
+# Federated learning configuration
+federated_learning:
+  # global_round: Total rounds of federated learning
+  round: 40  # Number of rounds
+  iid: False  # If False, use non-IID data distribution
+  dirichlet_rate: 0.25  # Dirichlet distribution rate for non-IID data
+  client_number: 10  # Total number of clients
+  number_group: 1  # Number of groups of clients
+  backdoor_rate: 0.2  # Rate of clients involved in backdoor attacks
+  split_rate: 0.9  # Training data split ratio between clients
+
+device:
+  learning_rate: 0.0001  # Learning rate for optimization
+  optimizer: 'adam'  # Optimizer to use (Adam)
+  # local_epoch: Number of epochs for each client’s local training
+  epoch: 4  # Local training epochs per client
+  criterion: 'CrossEntropy'  # Loss function to use (CrossEntropy for classification tasks)
+
+backdoor_paras:
+
+  # Available backdoor attack types
+  # Data Poisoning: 'badnet',
+  # Model Poisoning: 'Neurotoxin'
+  backdoor_name: 'badnet'  # Type of backdoor attack used
+  poisoned_rate: 0.2  # Percentage of data points to poison in the backdoor attack
+  cover_rate: 0  # Rate at which the trigger covers the data (0 means no trigger applied)
+  alpha: 0.4  # Blending factor for the poison trigger
+  trigger: None  # Trigger used in the backdoor attack (None means no specific trigger)
+
+  # If set to 0, the poisoned samples will be replaced with zeros during poisoning
+  need_test: 0  # Whether to test the poisoned model during backdoor training (0 means no test)
+
